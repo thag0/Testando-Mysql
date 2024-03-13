@@ -1,22 +1,17 @@
-import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.util.Properties;
 
-import ged.Ged;
 
 public class Main{
-   static Ged ged = new Ged();
 
    static final String CAMINHO_PROPERTIES = "config.properties";
 
    public static void main(String[] args){
       Properties props = lerProperties(CAMINHO_PROPERTIES);
-      String usuario = props.getProperty("db.usuario");
-      String senha = props.getProperty("db.senha");
-      String url = props.getProperty("db.url");
+      String dbUrl = props.getProperty("db.url");
+      String dbUsuario = props.getProperty("db.usuario");
+      String dbSenha = props.getProperty("db.senha");
       
       Database db = new Database();
       ResultSet res = null;
@@ -24,66 +19,75 @@ public class Main{
       
       boolean rodando = true;
       String op = "";
+      Menu menu = new Menu();
       while(rodando){
-         printMenu(sessao);
-         op = lerTeclado();
+         menu.print(sessao);
+         op = menu.lerTeclado();
          System.out.println();
 
          try{
             int opNum = Integer.parseInt(op);
             switch(opNum){
-               case 1:
-                  System.out.println("conectando...");
-                  db.conectar(url, usuario, senha);
+               case 1://conectar database
+                  System.out.print ("conectando...");
+                  db.conectar(dbUrl, dbUsuario, dbSenha);
                break;
 
-               case 2:
-                  System.out.println("desconectando...");
+               case 2://desconectar database
+                  System.out.print("desconectando...");
                   db.desconectar();
                break;
    
-               case 3:
+               case 3://add usuario
                   if(!sessao.dbConectado){
                      System.out.println("É necessário conexão com banco de dados.");
-                     esperarTecla();
+                     menu.esperarTecla();
                      break;
                   }
 
-                  System.out.print("Digite a query: ");
-                  String query = lerTeclado();
-                  res = db.query(query);
-                  esperarTecla();
+                  db.update(menu.addUsuario());
+                  menu.esperarTecla();
+               break;
+
+               case 4://remover usuario
+                  if(!sessao.dbConectado){
+                     System.out.println("É necessário conexão com banco de dados.");
+                     menu.esperarTecla();
+                     break;
+                  }
+
+                  db.update(menu.removerUsuario());
+                  menu.esperarTecla();
                break;
    
-               case 4:
+               case 5://fazer query
+                  if(!sessao.dbConectado){
+                     System.out.println("É necessário conexão com banco de dados.");
+                     menu.esperarTecla();
+                     break;
+                  }
+
+                  res = db.query(menu.fazerQuery());
+                  menu.esperarTecla();
+               break;
+   
+               case 6://imprimir query
+                  if(res == null){
+                     System.out.println("Nenhum resultado de query encontrado");
+                     menu.esperarTecla();
+                     break;
+                  }
+
+                  menu.imprimirQuery(res);
+
+                  menu.esperarTecla();
+               break;
+
+               case 7://limpar query
                   res = null;
                break;
    
-               case 5:
-                  if(res == null){
-                     System.out.println("Nenhum resultado de query encontrado");
-                     esperarTecla();
-                     break;
-                  }
-
-                  try{
-                     ResultSetMetaData metaData = res.getMetaData();
-                     int numColunas = metaData.getColumnCount();
-             
-                     while(res.next()){
-                        for(int i = 1; i <= numColunas; i++){
-                           String nomeColuna = metaData.getColumnName(i);
-                           String valorColuna = res.getString(i);
-                           System.out.print(nomeColuna + ": " + valorColuna + "  ");
-                        }
-                        System.out.println();
-                     }
-                  }catch(Exception e){}
-
-                  esperarTecla();
-               break;
-   
-               case 6:
+               case 8://sair
                   System.out.println("Saindo");
                   rodando = false;
                break;
@@ -97,32 +101,12 @@ public class Main{
 
          }catch(Exception e){
             e.printStackTrace();
-            esperarTecla();
+            menu.esperarTecla();
          }
 
       }
 
       db.desconectar();//garantia
-   }
-
-
-   /**
-    * Menu básico via terminal
-    */
-   static void printMenu(DadosSessao sessao){
-      ged.limparConsole();
-      System.out.println("Menu");
-      System.out.println("1 - Conectar ao database");
-      System.out.println("2 - Desconectar database");
-      System.out.println("3 - Fazer query");
-      System.out.println("4 - Limpar query");
-      System.out.println("5 - Imprimir query");
-      System.out.println("6 - Sair");
-      
-      System.out.println("\nConectado: " + sessao.dbConectado);
-      System.out.println("Query: " + sessao.resQuery);
-      
-      System.out.print("\nDigite uma opção: ");
    }
 
    /**
@@ -142,32 +126,6 @@ public class Main{
       }
 
       return props;
-   }
-
-   /**
-    * Auxiliar
-    */
-   static void esperarTecla(){
-      System.out.print("\nDigite qualquer tecla para continuar...");
-      lerTeclado();
-   }
-
-   /**
-    * Captura a entrada do teclado.
-    * @return string lida.
-    */
-   static String lerTeclado(){
-		String s;
-
-		try{
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			s = br.readLine();
-		
-		}catch(Exception e){
-			s = "";
-		}
-
-		return s;
    }
 
 }

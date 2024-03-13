@@ -58,6 +58,17 @@ public class Database{
       return res;
    }
 
+   public void update(String sql){
+      try{
+         Statement state = conexao.createStatement();
+         state.executeUpdate(sql);
+
+      } catch (SQLException e){
+         e.printStackTrace();
+      }
+  }
+  
+
    /**
     * Verifica se o banco de dados possui uma conexão ativa.
     * @return {@code true} caso o banco de dados esteja conectado,
