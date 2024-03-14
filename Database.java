@@ -58,6 +58,11 @@ public class Database{
       return res;
    }
 
+   /**
+    * Realiza operações de atualização dentro do banco de dados, essas operações
+    * incluem {@code INSERT}, {@code DELETE} ou {@code UPDATE}.
+    * @param sql {@code String} contendo a query desejada.
+    */
    public void update(String sql){
       try{
          Statement state = conexao.createStatement();
@@ -66,7 +71,7 @@ public class Database{
       } catch (SQLException e){
          e.printStackTrace();
       }
-  }
+   }
   
 
    /**

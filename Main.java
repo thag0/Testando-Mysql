@@ -2,20 +2,17 @@ import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.util.Properties;
 
+import ui.Janela;
 
 public class Main{
 
    static final String CAMINHO_PROPERTIES = "config.properties";
 
-   public static void main(String[] args){
+   public static void main(String[] args){      
       Properties props = lerProperties(CAMINHO_PROPERTIES);
-      String dbUrl = props.getProperty("db.url");
-      String dbUsuario = props.getProperty("db.usuario");
-      String dbSenha = props.getProperty("db.senha");
-      
       Database db = new Database();
       ResultSet res = null;
-      DadosSessao sessao = new DadosSessao();;
+      DadosSessao sessao = new DadosSessao();
       
       boolean rodando = true;
       String op = "";
@@ -29,8 +26,14 @@ public class Main{
             int opNum = Integer.parseInt(op);
             switch(opNum){
                case 1://conectar database
+                  if(sessao.dbConectado) break;
+
                   System.out.print ("conectando...");
-                  db.conectar(dbUrl, dbUsuario, dbSenha);
+                  db.conectar(
+                     props.getProperty("db.url"), 
+                     props.getProperty("db.usuario"), 
+                     props.getProperty("db.senha")
+                  );
                break;
 
                case 2://desconectar database
@@ -126,6 +129,27 @@ public class Main{
       }
 
       return props;
+   }
+
+   /**
+    * Testando ainda
+    */
+   static void rodarEmJanela(){
+      Janela janela = new Janela(600, 400, "JavaSql");
+
+      while(janela.isEnabled()){
+         janela.painelAtual().atualizar();
+         janela.painelAtual().desenhar();
+
+         try{
+            Thread.sleep(50);
+         }catch(InterruptedException e){
+            e.printStackTrace();
+         }
+      }
+
+      janela.dispose();
+      System.exit(0);
    }
 
 }

@@ -49,7 +49,7 @@ public class Menu{
       System.out.print("Digite o nome do usuário: ");
       String nome = lerTeclado();
       Usuario usuario = new Usuario(nome);
-      String sql = "DELETE FROM usuarios WHERE nome = '" + usuario.nome() + "'";
+      String sql = String.format("DELETE FROM usuarios WHERE nome = \'%s\'", usuario.nome());
       return sql;    
    }
 
