@@ -1,3 +1,4 @@
+package db;
 /**
  * Modelo de usuário do banco de dados.
  */

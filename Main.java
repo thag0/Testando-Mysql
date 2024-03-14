@@ -2,6 +2,7 @@ import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.util.Properties;
 
+import db.Database;
 import ui.Janela;
 
 public class Main{

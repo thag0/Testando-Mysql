@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
+import db.Usuario;
 import ged.Ged;
 
 public class Menu{
