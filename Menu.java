@@ -14,30 +14,31 @@ public class Menu{
     */
    public void print(DadosSessao sessao){
       ged.limparConsole();
-      System.out.println("Menu");
-      System.out.println("1 - Conectar ao database");
-      System.out.println("2 - Desconectar database");
-      System.out.println("3 - Adicionar usuário");
-      System.out.println("4 - Remover usuário");
-      System.out.println("5 - Fazer query");
-      System.out.println("6 - Imprimir query");
-      System.out.println("7 - Limpar query");
-      System.out.println("8 - Sair");
+
+      StringBuilder sb = new StringBuilder();
       
-      System.out.println("\nConectado: " + sessao.dbConectado);
-      System.out.println("Query: " + sessao.resQuery);
+      sb.append("\tMenu\n").append("\n");
+      sb.append("1 - Conectar ao database").append("\n");
+      sb.append("2 - Desconectar database").append("\n");
+      sb.append("3 - Adicionar usuário").append("\n");
+      sb.append("4 - Remover usuário").append("\n");
+      sb.append("5 - Fazer query").append("\n");
+      sb.append("6 - Imprimir query").append("\n");
+      sb.append("7 - Limpar query").append("\n");
+      sb.append("8 - Sair").append("\n");
       
+      sb.append("\nConectado: " + sessao.dbConectado).append("\n");
+      sb.append("Query: " + sessao.resQuery).append("\n");
+      
+      System.out.println(sb.toString());
+
       System.out.print("\nDigite uma opção: ");
    }
 
-   public void conectarDatabase(){
-      //...
-   }
-
-   public void desconectarDatabase(){
-      //...
-   }
-
+   /**
+    * Adiciona um novo usuário ao banco de dados.
+    * @return sql contendo a query para adição.
+    */
    public String addUsuario(){
       System.out.print("Digite o nome do usuário: ");
       String nome = lerTeclado();
@@ -46,6 +47,10 @@ public class Menu{
       return sql;
    }
 
+   /**
+    * Remove um usuário ao banco de dados.
+    * @return sql contendo a query para remoção.
+    */
    public String removerUsuario(){
       System.out.print("Digite o nome do usuário: ");
       String nome = lerTeclado();
@@ -54,12 +59,20 @@ public class Menu{
       return sql;    
    }
 
+   /**
+    * Realiza uma query qualquer digitada pelo usuário.
+    * @return query lida.
+    */
    public String fazerQuery(){
       System.out.print("Digite a query: ");
       String query = lerTeclado();
       return query;
    }
 
+   /**
+    * 
+    * @param res
+    */
    public void imprimirQuery(ResultSet res){
       try{
          ResultSetMetaData metaData = res.getMetaData();
@@ -77,7 +90,7 @@ public class Menu{
    }
 
    /**
-    * Captura a entrada do teclado.
+    * Captura a entrada do teclado digitada pelo usuário.
     * @return string lida.
     */
    public String lerTeclado(){
@@ -95,7 +108,7 @@ public class Menu{
    }
 
    /**
-    * Auxiliar
+    * Auxiliar para segurar o fluxo de execução do programa.
     */
     public void esperarTecla(){
       System.out.print("\nDigite qualquer tecla para continuar...");
