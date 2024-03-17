@@ -1,10 +1,14 @@
 package db;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Interface simples para conexão com banco de dados.
+ */
 public class Database{
    Connection conexao = null;
    String nome = null;
@@ -86,5 +90,24 @@ public class Database{
       }catch(SQLException e){}
    
       return false;
+   }
+
+   /**
+    * 
+    * @return
+    */
+   public String nome(){
+      String s = "";
+
+      if(conectado()){
+         try{
+            DatabaseMetaData dmd = conexao.getMetaData();
+            String url = dmd.getURL();
+            s = url.substring(url.lastIndexOf("/") + 1);
+            
+         }catch(SQLException e){}
+      }
+
+      return (s.equals("")) ? "n/a" : s;
    }
 }

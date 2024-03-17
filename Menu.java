@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -27,12 +28,15 @@ public class Menu{
       sb.append("7 - Limpar query").append("\n");
       sb.append("8 - Sair").append("\n");
       
-      sb.append("\nConectado: " + sessao.dbConectado).append("\n");
+      sb.append("\nConectado: " + sessao.dbConectado);
+      sb.append(sessao.dbConectado ? " (" + sessao.dbNome +")" : "");
+      sb.append("\n");
+      
       sb.append("Query: " + sessao.resQuery).append("\n");
       
       System.out.println(sb.toString());
 
-      System.out.print("\nDigite uma opção: ");
+      System.out.print("Digite uma opção: ");
    }
 
    /**
@@ -94,14 +98,14 @@ public class Menu{
     * @return string lida.
     */
    public String lerTeclado(){
-		String s;
+		String s = "";
 
 		try{
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			s = br.readLine();
 		
-		}catch(Exception e){
-			s = "";
+		}catch(IOException e){
+			e.printStackTrace();
 		}
 
 		return s;

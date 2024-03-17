@@ -31,15 +31,18 @@ public class Main{
 
                   System.out.print ("conectando...");
                   db.conectar(
-                     props.getProperty("db.url"), 
+                     props.getProperty("db.url") + props.getProperty("db.nome"), 
                      props.getProperty("db.usuario"), 
                      props.getProperty("db.senha")
                   );
+
+                  sessao.dbNome = db.nome();
                break;
 
                case 2://desconectar database
                   System.out.print("desconectando...");
                   db.desconectar();
+                  sessao.dbNome = "";//melhorar isso se der
                break;
    
                case 3://add usuario
@@ -101,6 +104,7 @@ public class Main{
             }
 
             sessao.dbConectado = db.conectado();
+            sessao.dbNome = db.nome();
             sessao.resQuery = res != null;
 
          }catch(Exception e){
