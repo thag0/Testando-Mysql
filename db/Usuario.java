@@ -13,7 +13,7 @@ public class Usuario{
    private LinkedHashMap <String, String> infos = new LinkedHashMap<>();
 
    /**
-    * Instância um novo usuário de acordo com a estrutura do banco de dados
+    * Instancia um novo usuário de acordo com a estrutura do banco de dados
     * @param nome nome do usuário.
     * @param cidade cidade do usuário.
     * @param senha senha do usuário.
@@ -24,32 +24,20 @@ public class Usuario{
       infos.put("senha", senha);
    }
 
+   /**
+    * Instancia um usuário com os campos vazios.
+    */
    public Usuario(){
       this("", "", "");
    }
 
    /**
-    * Retorna o nome do usuário.
-    * @return nome do usuário.
+    * Retorna o valor contido na coluna da tabela de usuários.
+    * @return valor da coluna especificada.
     */
-   public String nome(){
-      return infos.get("nome");
-   }
-
-   /**
-    * Retorna a cidade do usuário.
-    * @return cidade do usuário.
-    */
-   public String cidade(){
-      return infos.get("cidade");
-   }
-
-   /**
-    * Retorna a senha do usuário.
-    * @return senha do usuário.
-    */
-   public String senha(){
-      return infos.get("senha");
+   public String get(String coluna){
+      String s = infos.get(coluna);
+      return s == null ? "" : s;
    }
 
    /**
@@ -58,5 +46,21 @@ public class Usuario{
     */
    public String[] chaves(){
       return infos.keySet().toArray(new String[0]);
+   }
+
+   /**
+    * Retorna os valores de cada atributo do usuário.
+    * @return valores de atributo do usuário.
+    */
+   public String[] valores(){
+      String[] v = new String[infos.size()];
+      
+      int i = 0;
+      for(String chave : chaves()){
+         v[i] = infos.get(chave);
+         i++;
+      }
+
+      return v;
    }
 }
