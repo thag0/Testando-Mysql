@@ -1,15 +1,12 @@
-import java.io.FileInputStream;
 import java.sql.ResultSet;
-import java.util.Properties;
 
 import db.Database;
 import ui.Janela;
 
 public class Main{
-   static final String CAMINHO_PROPERTIES = "config.properties";
+   static final String CAMINHO_PROPERTIES = "database.properties";
 
    public static void main(String[] args){
-      Properties props = lerProperties(CAMINHO_PROPERTIES);
       Database db = new Database();
       ResultSet res = null;
       DadosSessao sessao = new DadosSessao();
@@ -28,14 +25,13 @@ public class Main{
                case 1://conectar database
                   if(sessao.dbConectado) break;
 
-                  System.out.print ("conectando...");
-                  db.conectar(
-                     props.getProperty("db.url") + props.getProperty("db.nome"), 
-                     props.getProperty("db.usuario"), 
-                     props.getProperty("db.senha")
-                  );
-
+                  System.out.println("conectando...");
+                  
+                  if(db.conectar(CAMINHO_PROPERTIES)){
+                     System.out.println("\nConexão estabelecida com: " + db.nome());
+                  }
                   sessao.dbNome = db.nome();
+                  menu.esperarTecla();
                break;
 
                case 2://desconectar database
@@ -82,8 +78,7 @@ public class Main{
                      break;
                   }
 
-                  System.out.print("Query de consulta: ");
-                  entrada = menu.lerTeclado();
+                  entrada = "SELECT * FROM usuarios";
                   res = db.query(entrada);
                   menu.imprimirConsulta(entrada, res);
 
@@ -117,25 +112,6 @@ public class Main{
       }
 
       db.desconectar();//garantia
-   }
-
-   /**
-    * Carrega os dados de propriedade necessários para conectar
-    * no banco de dados.
-    * @param caminho caminho do arquivo de configurações.
-    * @return propriedades lidas do arquivo.
-    */
-   static Properties lerProperties(String caminho){
-      Properties props = new Properties();
-
-      try(FileInputStream fis = new FileInputStream(caminho)){
-         props.load(fis);
-
-      }catch(Exception e){
-         throw new RuntimeException(e);
-      }
-
-      return props;
    }
 
    /**

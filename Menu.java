@@ -23,7 +23,7 @@ public class Menu{
       sb.append("2 - Desconectar database").append("\n");
       sb.append("3 - Adicionar usuário").append("\n");
       sb.append("4 - Remover usuário").append("\n");
-      sb.append("5 - Fazer consulta").append("\n");
+      sb.append("5 - Consultar usuários").append("\n");
       sb.append("6 - Fazer alteração").append("\n");
       sb.append("7 - Sair").append("\n");
       
@@ -115,7 +115,7 @@ public class Menu{
          int numColunas = metaData.getColumnCount();
          
          ged.limparConsole();
-         System.out.println("Resultados para: " + sql + "\n");
+         System.out.println("Usuários registrados\n");
          
          while(res.next()){
             for(int i = 1; i <= numColunas; i++){

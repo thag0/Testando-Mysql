@@ -1,10 +1,13 @@
 package db;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 /**
  * Interface simples para conexão com banco de dados.
@@ -20,17 +23,43 @@ public class Database{
 
    /**
     * Tenta conectar ao banco de dados desejado.
-    * @param url 
-    * @param usuario nome do usuário do banco de dados.
-    * @param senha senha do usuário.
+    * @param caminho {@code String} contendo o caminho do arquivo de
+    * propriedades do banco de dados.
     */
-   public void conectar(String url, String usuario, String senha){
+   public boolean conectar(String caminho){
+      Properties props = lerProperties(caminho);
       try{
+         String url = props.getProperty("db.url") + props.getProperty("db.nome");
+         String usuario = props.getProperty("db.usuario");
+         String senha = props.getProperty("db.senha");
          conexao = DriverManager.getConnection(url, usuario, senha);
-      
+
       }catch(SQLException e){
-         e.printStackTrace();
+         System.err.println("\nNão foi possível conectar ao banco de dados:");
+         System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
+         System.err.println("\nVerifique o arquivo de propriedades do ambiente");
       }
+
+      return conectado();
+   }
+
+   /**
+    * Carrega os dados de propriedade necessários para conectar
+    * no banco de dados.
+    * @param caminho caminho do arquivo de propriedades do banco de dados.
+    * @return propriedades lidas do arquivo.
+    */
+   private Properties lerProperties(String caminho){
+      Properties props = new Properties();
+
+      try(FileInputStream fis = new FileInputStream(caminho)){
+         props.load(fis);
+
+      }catch(Exception e){
+         throw new RuntimeException(e);
+      }
+
+      return props;
    }
 
    /**
@@ -63,15 +92,20 @@ public class Database{
    /**
     * Realiza uma consulta no banco de dados conectado.
     * @param sql {@code String} contendo a query desejada.
+    * @param parametros argumentos da query.
     * @return resultado da consulta.
     */
-   public ResultSet query(String sql){
+   public ResultSet query(String sql, String... parametros){
       ResultSet res = null;
 
       if(conectado()){
          try{
-            Statement state = conexao.createStatement();
-            res = state.executeQuery(sql);
+            PreparedStatement state = conexao.prepareStatement(sql);
+            for(int i = 0; i < parametros.length; i++){
+               state.setString(i+1, parametros[i]);
+            }
+
+            res = state.executeQuery();
    
          }catch(SQLException e){
             System.out.println("Erro ao executar consulta:");
@@ -86,6 +120,7 @@ public class Database{
     * Realiza operações de atualização dentro do banco de dados, essas operações
     * incluem {@code INSERT}, {@code DELETE} ou {@code UPDATE}.
     * @param sql {@code String} contendo a query desejada.
+    * @return quantidade de alterações feitas.
     */
    public int update(String sql){
       int alt = 0;
@@ -96,7 +131,8 @@ public class Database{
             alt = state.executeUpdate(sql);
    
          }catch(SQLException e){
-            e.printStackTrace();
+            System.out.println("Erro ao executar update:");
+            System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
          }
       }
 
