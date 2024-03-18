@@ -6,17 +6,16 @@ import db.Database;
 import ui.Janela;
 
 public class Main{
-
    static final String CAMINHO_PROPERTIES = "config.properties";
 
-   public static void main(String[] args){      
+   public static void main(String[] args){
       Properties props = lerProperties(CAMINHO_PROPERTIES);
       Database db = new Database();
       ResultSet res = null;
       DadosSessao sessao = new DadosSessao();
       
       boolean rodando = true;
-      String op = "";
+      String op = "", entrada;
       Menu menu = new Menu();
       while(rodando){
          menu.print(sessao);
@@ -63,55 +62,58 @@ public class Main{
                      break;
                   }
 
-                  db.update(menu.removerUsuario());
+                  entrada = menu.removerUsuario();
+
+                  System.out.println();
+                  if(db.update(entrada) > 0){
+                     System.out.println("Usuário removido.");
+
+                  }else{
+                     System.out.println("Usuário não encontrado ou senha incorreta.");
+                  }
+
                   menu.esperarTecla();
                break;
    
-               case 5://fazer query
+               case 5://fazer consulta
                   if(!sessao.dbConectado){
                      System.out.println("É necessário conexão com banco de dados.");
                      menu.esperarTecla();
                      break;
                   }
 
-                  res = db.query(menu.fazerQuery());
+                  System.out.print("Query de consulta: ");
+                  entrada = menu.lerTeclado();
+                  res = db.query(entrada);
+                  menu.imprimirConsulta(entrada, res);
+
                   menu.esperarTecla();
                break;
-   
-               case 6://imprimir query
-                  if(res == null){
-                     System.out.println("Nenhum resultado de query encontrado");
+
+               case 6://fazer alteração
+                  if(!sessao.dbConectado){
+                     System.out.println("É necessário conexão com banco de dados.");
                      menu.esperarTecla();
                      break;
                   }
 
-                  menu.imprimirQuery(res);
-
+                  db.update((menu.fazerAlteracao()));
                   menu.esperarTecla();
                break;
-
-               case 7://limpar query
-                  res = null;
-               break;
    
-               case 8://sair
+               case 7://sair
                   System.out.println("Saindo");
                   rodando = false;
                break;
-            
-               default:
-                  System.out.println("Opção inválida.");
             }
 
             sessao.dbConectado = db.conectado();
             sessao.dbNome = db.nome();
-            sessao.resQuery = res != null;
 
          }catch(Exception e){
             e.printStackTrace();
             menu.esperarTecla();
          }
-
       }
 
       db.desconectar();//garantia
