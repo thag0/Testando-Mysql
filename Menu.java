@@ -4,8 +4,8 @@ import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
-import db.Usuario;
 import ged.Ged;
+import modelo.Usuario;
 
 public class Menu{
    Ged ged = new Ged();
@@ -38,58 +38,37 @@ public class Menu{
 
    /**
     * Adiciona um novo usuário ao banco de dados.
-    * @return sql contendo a query para adição.
+    * @return {@code Usuário} instanciado.
     */
-   public String addUsuario(){
+   public Usuario addUsuario(){
       System.out.println("Informações do usuário.");
 
-      Usuario usuario = new Usuario();
-      String[] chaves = usuario.chaves();
-      String[] valores = new String[chaves.length];
+      System.out.print("Nome: ");
+      String nome = lerTeclado();
 
-      for(int i = 0; i < chaves.length; i++){
-         System.out.print(chaves[i] + ": ");
-         valores[i] = "\'" + lerTeclado() + "\'";
-      }
+      System.out.print("\nCidade: ");
+      String cidade = lerTeclado();
 
-      StringBuilder sb = new StringBuilder();
+      System.out.print("\nSenha: ");
+      String senha = lerTeclado();
 
-      sb.append("INSERT INTO usuarios (");
-         sb.append(chaves[0]);
-         for(int i = 1; i < chaves.length; i++){
-            sb.append(", ").append(chaves[i]);
-         }
-      sb.append(") ");
-
-      sb.append("VALUES (");
-         sb.append(valores[0]);
-         for(int i = 1; i < valores.length; i++){
-            sb.append(", ").append(valores[i]);
-         }
-      sb.append(")");
-
-      return sb.toString();
+      return new Usuario(nome, cidade, senha);
    }
 
    /**
     * Remove um usuário ao banco de dados.
-    * @return sql contendo a query para remoção.
+    * @return {@code Usuário} instanciado.
     */
-   public String removerUsuario(){
-      System.out.println("Informações para remoção");
-      
+   public Usuario removerUsuario(){
+      System.out.println("Informações do usuário.");
+
       System.out.print("Nome: ");
-      String nome = "\'" + lerTeclado() + "\'";
-      
-      System.out.print("Senha: ");
-      String senha = "\'" + lerTeclado() + "\'";
+      String nome = lerTeclado();
 
-      StringBuilder sb = new StringBuilder();
-      sb.append("DELETE FROM usuarios WHERE ");
-      sb.append("nome = ").append(nome).append(" AND ");
-      sb.append("senha = ").append(senha);
+      System.out.print("\nSenha: ");
+      String senha = lerTeclado();
 
-      return sb.toString();
+      return new Usuario(nome, "n/a", senha);
    }
 
    /**

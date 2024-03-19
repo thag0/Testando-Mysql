@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-import controller.ContPainelLogin;
+import cont.ContPainelLogin;
 import ui.comps.BotaoBase;
 import ui.comps.LbBase;
 import ui.comps.TxtBase;

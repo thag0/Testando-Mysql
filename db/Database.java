@@ -5,16 +5,27 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.SQLException; 
 import java.util.Properties;
 
 /**
  * Interface simples para conexão com banco de dados.
  */
 public class Database{
+
+   /**
+    * Instância única de um Dataabse.
+    */
    static Database instancia;
+
+   /**
+    * Conexão com o banco de dados sql.
+    */
    Connection conexao = null;
+
+   /**
+    * Nome do banco de dados conectado, apenas para estética da aplicação.
+    */
    String nome = "";
 
    /**
@@ -133,24 +144,28 @@ public class Database{
     * Realiza operações de atualização dentro do banco de dados, essas operações
     * incluem {@code INSERT}, {@code DELETE} ou {@code UPDATE}.
     * @param sql {@code String} contendo a query desejada.
+    * @param parametros argumentos da atualização.
     * @return quantidade de alterações feitas.
     */
-   public int update(String sql){
-      int alt = 0;
-
+   public int update(String sql, String... parametros){
+      int alts = 0;
+   
       if(conectado()){
          try{
-            //TODO adicionar proteção contra sql injection
-            Statement state = conexao.createStatement();
-            alt = state.executeUpdate(sql);
+            PreparedStatement state = conexao.prepareStatement(sql);
+            for(int i = 0; i < parametros.length; i++){
+               state.setString(i+1, parametros[i]);
+            }
    
+            alts = state.executeUpdate();
+      
          }catch(SQLException e){
             System.out.println("Erro ao executar update:");
             System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
          }
       }
-
-      return alt;
+   
+      return alts;
    }
 
    /**

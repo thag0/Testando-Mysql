@@ -1,5 +1,6 @@
 import java.sql.ResultSet;
 
+import db.DAOUsuario;
 import db.Database;
 import ui.Janela;
 
@@ -7,14 +8,15 @@ public class Main{
    static final String CAMINHO_PROPERTIES = "database.properties";
 
    public static void main(String[] args){
+      DAOUsuario daoUser = new DAOUsuario();
       Database db = Database.getInstance();
       db.conectar(CAMINHO_PROPERTIES);
       
       ResultSet res = null;
       DadosSessao sessao = new DadosSessao();
       
-      rodarEmJanela();
-      System.exit(0);//temp
+      // rodarEmJanela();
+      // System.exit(0);//temp
 
       boolean rodando = true;
       String op = "", entrada;
@@ -52,7 +54,13 @@ public class Main{
                      break;
                   }
 
-                  db.update(menu.addUsuario());
+                  if(daoUser.inserir(menu.addUsuario())){
+                     System.out.println("Usuário adicionado.");
+                  
+                  }else{
+                     System.out.println("Não foi possível adicionar o usuário solicitado.");
+                  }
+
                   menu.esperarTecla();
                break;
 
@@ -63,10 +71,8 @@ public class Main{
                      break;
                   }
 
-                  entrada = menu.removerUsuario();
-
                   System.out.println();
-                  if(db.update(entrada) > 0){
+                  if(daoUser.deletar(menu.removerUsuario())){
                      System.out.println("Usuário removido.");
 
                   }else{
@@ -97,7 +103,8 @@ public class Main{
                      break;
                   }
 
-                  db.update((menu.fazerAlteracao()));
+                  // db.update((menu.fazerAlteracao()));
+                  System.out.println("Não implementado");
                   menu.esperarTecla();
                break;
    
