@@ -13,13 +13,26 @@ import java.util.Properties;
  * Interface simples para conexão com banco de dados.
  */
 public class Database{
+   static Database instancia;
    Connection conexao = null;
    String nome = "";
 
    /**
     * Interface para conexão com banco de dados.
     */
-   public Database(){}
+   private Database(){}
+
+   /**
+    * Retorna uma instância única do database para toda a aplicação.
+    * @return {@code Database} responável pela conexão com banco de dados.
+    */
+   public static Database getInstance(){
+      if(instancia == null){
+         instancia = new Database();
+      }
+
+      return instancia;
+   }
 
    /**
     * Tenta conectar ao banco de dados desejado.
@@ -127,6 +140,7 @@ public class Database{
 
       if(conectado()){
          try{
+            //TODO adicionar proteção contra sql injection
             Statement state = conexao.createStatement();
             alt = state.executeUpdate(sql);
    

@@ -17,6 +17,7 @@ public abstract class PainelBase extends JPanel{
       this.largura = (float)largura;
       
       setPreferredSize(new Dimension(altura, largura));
+      setDoubleBuffered(true);
    }
 
    protected void configPadrao(){

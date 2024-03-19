@@ -22,6 +22,7 @@ public class Usuario{
       infos.put("nome", nome);
       infos.put("cidade", cidade);
       infos.put("senha", senha);
+      infos.put("admin", "FALSE");
    }
 
    /**
