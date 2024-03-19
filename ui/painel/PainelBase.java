@@ -2,7 +2,6 @@ package ui.painel;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
@@ -25,17 +24,4 @@ public abstract class PainelBase extends JPanel{
       setFocusable(false);
       setBackground(corBackground);
    }
-
-   protected float textoLargura(Graphics2D g2, String str){
-      return (float) g2.getFontMetrics().getStringBounds(str, g2).getWidth();
-   }
-
-   protected float textoAltura(Graphics2D g2, String str){
-      return (float) g2.getFontMetrics().getStringBounds(str, g2).getHeight();
-   }
-
-   public abstract void atualizar();
-
-   public abstract void desenhar();
-
 }

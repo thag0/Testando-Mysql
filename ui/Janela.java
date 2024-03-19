@@ -1,20 +1,29 @@
 package ui;
 
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 
-import ui.painel.Menu;
+import ui.painel.PainelLogin;
 import ui.painel.PainelBase;
 
 public class Janela extends JFrame{
-   Menu menu;
+   PainelLogin menu;
+
+   final int minLargura;
+   final int minAltura;
+   final int escala = 40;
    
    public Janela(int altura, int largura, String titulo){
       setTitle(titulo);
       setVisible(true);
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      setResizable(false);
+
+      minLargura = escala * 16;
+      minAltura  = escala *  9;
+      setMinimumSize(new Dimension(minLargura, minAltura));
       
-      menu = new Menu(altura, largura);
+      menu = new PainelLogin(altura, largura);
       menu.setVisible(true);
       add(menu);
       

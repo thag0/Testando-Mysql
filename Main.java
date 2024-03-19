@@ -11,6 +11,9 @@ public class Main{
       ResultSet res = null;
       DadosSessao sessao = new DadosSessao();
       
+      rodarEmJanela();
+      System.exit(0);//temp
+
       boolean rodando = true;
       String op = "", entrada;
       Menu menu = new Menu();
@@ -120,16 +123,7 @@ public class Main{
    static void rodarEmJanela(){
       Janela janela = new Janela(600, 400, "JavaSql");
 
-      while(janela.isEnabled()){
-         janela.painelAtual().atualizar();
-         janela.painelAtual().desenhar();
-
-         try{
-            Thread.sleep(50);
-         }catch(InterruptedException e){
-            e.printStackTrace();
-         }
-      }
+      while(janela.isEnabled()){}
 
       janela.dispose();
       System.exit(0);
