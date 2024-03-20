@@ -1,19 +1,23 @@
 package ui;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import ui.painel.PainelLogin;
-import ui.painel.PainelBase;
 
 public class Janela extends JFrame{
-   PainelLogin menu;
+   PainelLogin pLogin;
 
    final int minLargura;
    final int minAltura;
    final int escala = 40;
    
+   final String CAMINHO_ICONE = "img/icone-janela.png";
+
    public Janela(int altura, int largura, String titulo){
       setTitle(titulo);
       setVisible(true);
@@ -23,15 +27,26 @@ public class Janela extends JFrame{
       minAltura  = escala *  9;
       setMinimumSize(new Dimension(minLargura, minAltura));
       
-      menu = new PainelLogin(altura, largura);
-      menu.setVisible(true);
-      add(menu);
+      try{
+         BufferedImage icone = ImageIO.read(new File(CAMINHO_ICONE));
+         setIconImage(icone);
+      }catch(Exception e){
+         System.out.println(e);
+      }
+
+      initComps();
+
+      add(pLogin);
       
       pack();
       setLocationRelativeTo(null);
    }
 
-   public PainelBase painelAtual(){
-      return menu;//temp
+   /**
+    * Inicialização dos componentes da janela da aplicação.
+   */
+   private void initComps(){
+      pLogin = new PainelLogin(minAltura, minLargura);
+      pLogin.setVisible(true);
    }
 }

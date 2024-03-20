@@ -1,4 +1,9 @@
-import java.sql.ResultSet;
+import java.awt.Dimension;
+import java.sql.SQLException;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import db.DAOUsuario;
 import db.Database;
@@ -8,15 +13,81 @@ public class Main{
    static final String CAMINHO_PROPERTIES = "database.properties";
 
    public static void main(String[] args){
-      DAOUsuario daoUser = new DAOUsuario();
       Database db = Database.getInstance();
-      db.conectar(CAMINHO_PROPERTIES);
+
+      rodarEmJanela(db);
+
+      db.desconectar();//garantia
+   }
+    
+   /**
+    * Abre um explorador de arquivos para buscar o caminho do arquivo
+    * de propriedades do database.
+    * @return caminho do arquivo {@code database.properties}.
+    */
+   static String caminhoPropriedadesDatabase(){
+      JFileChooser fc = new JFileChooser();
+      fc.setPreferredSize(new Dimension(600, 400));
+      fc.setDialogTitle("Selecione o arquivo de propriedades do database");
+      FileNameExtensionFilter filtro = new FileNameExtensionFilter("Arquivos de Propriedades (*.properties)", "properties");
+      fc.setFileFilter(filtro);
       
-      ResultSet res = null;
+      int confirmado = fc.showOpenDialog(null);
+      if(confirmado == JFileChooser.APPROVE_OPTION){
+         return fc.getSelectedFile().getAbsolutePath();
+      
+      }else{
+         return null;
+      }
+   }
+
+   /**
+    * Testando ainda
+    */
+   static void rodarEmJanela(Database db){
+      // String caminhoProperties = caminhoPropriedadesDatabase();
+      String caminhoProperties = CAMINHO_PROPERTIES;//temporario para acelerar os testes
+
+      if(caminhoProperties != null){
+         try{
+            db.conectar(caminhoProperties);
+            Janela janela = new Janela(600, 400, "Conectado em: " + db.nome());
+            
+            while(janela.isEnabled()){
+               //loop pra segurar a execução do programa
+            }
+         
+         }catch(SQLException e){
+            StringBuilder sb = new StringBuilder();
+            sb.append("Erro ao tentar ler o arquivo: ");
+            sb.append(e.getClass().getSimpleName()).append(": ").append(e.getMessage());
+            sb.append("Verifique se o arquivo selecionado é um arquivo de propriedades válido.");
+
+            JOptionPane.showMessageDialog(
+               null, 
+               sb.toString(), 
+               "Formato de arquivo inválido", 
+               JOptionPane.PLAIN_MESSAGE
+            );
+         }
+      
+      }else{
+         JOptionPane.showMessageDialog(
+            null, 
+            "Nenhum arquivo de propriedades para o banco de dados selecionado", 
+            "Arquivo não informado", 
+            JOptionPane.PLAIN_MESSAGE
+         );
+         return;
+      }
+   }
+
+   /**
+    * Execução padrão e mais básica.
+    */
+   static void rodarEmTerminal(Database db){
+      DAOUsuario daoUser = new DAOUsuario();
       DadosSessao sessao = new DadosSessao();
-      
-      // rodarEmJanela();
-      // System.exit(0);//temp
 
       boolean rodando = true;
       String op = "", entrada;
@@ -90,8 +161,7 @@ public class Main{
                   }
 
                   entrada = "SELECT * FROM usuarios";
-                  res = db.query(entrada);
-                  menu.imprimirConsulta(entrada, res);
+                  menu.imprimirConsulta(entrada, db.query(entrada));
 
                   menu.esperarTecla();
                break;
@@ -122,20 +192,5 @@ public class Main{
             menu.esperarTecla();
          }
       }
-
-      db.desconectar();//garantia
    }
-
-   /**
-    * Testando ainda
-    */
-   static void rodarEmJanela(){
-      Janela janela = new Janela(600, 400, "JavaSql");
-
-      while(janela.isEnabled()){}
-
-      janela.dispose();
-      System.exit(0);
-   }
-
 }

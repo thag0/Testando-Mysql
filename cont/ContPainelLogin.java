@@ -1,5 +1,6 @@
 package cont;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import db.Database;
@@ -21,16 +22,24 @@ public class ContPainelLogin{
 
    /**
     * 
-    * @param nome
-    * @param senha
     */
-   public void logar(String nome, String senha){
+   public void logar(){
       Database db = Database.getInstance();
-      String sql = "SELECT * FROM usuarios WHERE nome = ? AND senha = ? AND admin = ?";
+      String sql = "SELECT * FROM usuarios WHERE nome = ? AND senha = ?";
 
       try{
-         if(db.query(sql, nome, senha, "1").next()){
-            System.out.println("Usuário encontrado.");
+         String nome = painel.txtUsuario.getText();
+         String senha = painel.txtSenha.getText();
+
+         ResultSet res = db.query(sql, nome, senha);
+         if(res.next()){
+            if(res.getBoolean("admin")){
+               System.out.println("Usuário encontrado (admin).");
+            
+            }else{
+               System.out.println("Usuário encontrado.");
+            }
+
          }else{
             System.out.println("Usuário não encontrado.");
          }

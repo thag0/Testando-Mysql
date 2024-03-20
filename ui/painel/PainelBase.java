@@ -16,7 +16,7 @@ public abstract class PainelBase extends JPanel{
       this.altura  = (float)altura;
       this.largura = (float)largura;
       
-      setPreferredSize(new Dimension(altura, largura));
+      setPreferredSize(new Dimension(largura, altura));
       setDoubleBuffered(true);
    }
 

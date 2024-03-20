@@ -7,6 +7,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 import cont.ContPainelLogin;
 import ui.comps.BotaoBase;
@@ -14,13 +15,13 @@ import ui.comps.LbBase;
 import ui.comps.TxtBase;
 
 public class PainelLogin extends PainelBase{
-   ContPainelLogin controlador = new ContPainelLogin(this);
+   private ContPainelLogin controlador = new ContPainelLogin(this);
 
-   BotaoBase botao;
-   TxtBase txtUsuario;
-   TxtBase txtSenha;
-   LbBase lbUsuario;
-   LbBase lbSenha;
+   public BotaoBase botao;
+   public TxtBase txtUsuario;
+   public TxtBase txtSenha;
+   public LbBase lbUsuario;
+   public LbBase lbSenha;
    
    Color corCaixaTexto = new Color(255, 255, 255);
 
@@ -86,7 +87,17 @@ public class PainelLogin extends PainelBase{
    private void initComps(){
       botao = new BotaoBase(30, 80, "Entrar");
       botao.addActionListener(e -> {
-         controlador.logar(txtUsuario.getText(), txtSenha.getText());
+         if(!txtUsuario.getText().isBlank() && !txtSenha.getText().isBlank()){
+            controlador.logar();
+         
+         }else{
+            JOptionPane.showMessageDialog(
+               this, 
+               "Por favor, preencha todos os campos.", 
+               "Campos incompletos", 
+               JOptionPane.PLAIN_MESSAGE
+            );
+         }
       });
 
       txtUsuario = new TxtBase(20, 200, "");

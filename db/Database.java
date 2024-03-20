@@ -47,22 +47,16 @@ public class Database{
 
    /**
     * Tenta conectar ao banco de dados desejado.
-    * @param caminho {@code String} contendo o caminho do arquivo de
-    * propriedades do banco de dados.
+    * @param caminho {@code String} contendo o caminho do {@code arquivo de
+    * propriedades} do banco de dados.
     */
-   public boolean conectar(String caminho){
+   public boolean conectar(String caminho) throws SQLException{
       Properties props = lerProperties(caminho);
-      try{
-         String url = props.getProperty("db.url") + props.getProperty("db.nome");
-         String usuario = props.getProperty("db.usuario");
-         String senha = props.getProperty("db.senha");
-         conexao = DriverManager.getConnection(url, usuario, senha);
 
-      }catch(SQLException e){
-         System.err.println("\nNão foi possível conectar ao banco de dados:");
-         System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-         System.err.println("\nVerifique o arquivo de propriedades do ambiente");
-      }
+      String url = props.getProperty("db.url") + props.getProperty("db.nome");
+      String usuario = props.getProperty("db.usuario");
+      String senha = props.getProperty("db.senha");
+      conexao = DriverManager.getConnection(url, usuario, senha);
 
       return conectado();
    }
