@@ -23,7 +23,7 @@ public class ContPainelLogin{
    /**
     * 
     */
-   public void logar(){
+   public void verificarLogin(){
       Database db = Database.getInstance();
       String sql = "SELECT * FROM usuarios WHERE nome = ? AND senha = ?";
 
@@ -35,6 +35,7 @@ public class ContPainelLogin{
          if(res.next()){
             if(res.getBoolean("admin")){
                System.out.println("Usuário encontrado (admin).");
+               painel.redirecionar(painel, "menu");
             
             }else{
                System.out.println("Usuário encontrado.");

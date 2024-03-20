@@ -10,26 +10,77 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import cont.ContPainelLogin;
-import ui.comps.BotaoBase;
+import ui.Janela;
+import ui.comps.BtBase;
 import ui.comps.LbBase;
 import ui.comps.TxtBase;
 
+/**
+ * Modelo de painel para o login do usuário na aplicação.
+ */
 public class PainelLogin extends PainelBase{
+   
+   /**
+    * Janela para poder redirecionar os paineis
+    */
+   Janela janela;
+
+   /**
+    * Controlador responvável pela regra de negócio do painel.
+    */
    private ContPainelLogin controlador = new ContPainelLogin(this);
 
-   public BotaoBase botao;
+   /**
+    * Botão para fazer login
+    */
+   public BtBase botao;
+
+   /**
+    * Caixa de texto para pegar entrada do nome do usuário.
+    */
    public TxtBase txtUsuario;
+
+   /**
+    * Caixa de texto para pegar a entrada da senha do usuário.
+    */
    public TxtBase txtSenha;
+
+   /**
+    * Label identificador para o campo do nome do usuário.
+    */
    public LbBase lbUsuario;
+
+   /**
+    * Label identificador para o campo da senha do usuário.
+    */
    public LbBase lbSenha;
    
-   Color corCaixaTexto = new Color(255, 255, 255);
+   /**
+    * Cor padrão para as caixa de texto.
+    */
+   Color corCaixaTexto = new Color(245, 245, 245);
 
+   /**
+    * Caminho relativo onde deve estar a imagem usada para plano de fundo
+    * do painel.
+    */
    final String CAMINHO_IMG_FUNDO = "/img/img-login.jpg";
+   
+   /**
+    * Imagem usada como plano de fundo do painel.
+    */
    BufferedImage imgFundo;
 
-   public PainelLogin(int altura, int largura){
+   /**
+    * Inicializa um novo painel de login.
+    * @param janela janela em que o painel está adicionado.
+    * @param altura altura do painel.
+    * @param largura largura do painel.
+    */
+   public PainelLogin(Janela janela, int altura, int largura){
       super(altura, largura);
+      this.janela = janela;
+
       configPadrao();
       setLayout(null);
 
@@ -85,10 +136,10 @@ public class PainelLogin extends PainelBase{
     * Inicialização dos componentes do painel de login.
    */
    private void initComps(){
-      botao = new BotaoBase(30, 80, "Entrar");
+      botao = new BtBase(30, 80, "Entrar");
       botao.addActionListener(e -> {
          if(!txtUsuario.getText().isBlank() && !txtSenha.getText().isBlank()){
-            controlador.logar();
+            controlador.verificarLogin();
          
          }else{
             JOptionPane.showMessageDialog(
@@ -119,6 +170,11 @@ public class PainelLogin extends PainelBase{
       if(imgFundo != null){
          g.drawImage(imgFundo, 0, 0, getWidth(), getHeight(), null);
       }
+   }
+
+   @Override
+   public void redirecionar(PainelBase base, String dest){
+      janela.redirecionar(base, dest);
    }
 
 }

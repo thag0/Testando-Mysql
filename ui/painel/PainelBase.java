@@ -25,4 +25,32 @@ public abstract class PainelBase extends JPanel{
       setFocusable(false);
       setBackground(corBackground);
    }
+
+   /**
+    * Torna o painel ativo, deixando ele visível.
+    */
+   public void ativar(){
+      setVisible(true);
+      setFocusable(true);
+   }
+
+   /**
+    * Torna o painel inativo, deixando ele invisível.
+    */
+   public void desativar(){
+      setVisible(false);
+      setFocusable(false);
+   }
+
+   /**
+    * Redireciona o painel para o destino.
+    * <p>
+    *    Redirecionar também quer dizer que o painel base
+    *    será desativado, ficando invisível e inativo enquanto
+    *    o painel de destino ficará ativo.
+    * </p>
+    * @param base painel base.
+    * @param dest painel destino do redirecionamento.
+    */
+   public abstract void redirecionar(PainelBase base, String dest);
 }

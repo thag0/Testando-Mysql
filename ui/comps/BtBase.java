@@ -8,7 +8,7 @@ import javax.swing.JButton;
 /**
  * Modelo base de botão dentro da aplicação.
  */
-public class BotaoBase extends JButton{
+public class BtBase extends JButton{
    private final int altura;
    private final int largura;
    Color corBackground = new Color(30, 30, 30);
@@ -16,7 +16,7 @@ public class BotaoBase extends JButton{
 
    final int borda = 30;
    
-   public BotaoBase(int altura, int largura, String texto){
+   public BtBase(int altura, int largura, String texto){
       setPreferredSize(new Dimension(largura, altura));
       setText(texto);
       setBackground(corBackground);
