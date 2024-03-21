@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 import contr.ContPainelMenu;
-import modelo.DadosSessao;
 import ui.Janela;
 import ui.comps.BtBase;
 import ui.comps.LbBase;
@@ -35,8 +34,12 @@ public class PainelMenu extends PainelBase{
     */
    BufferedImage imgFundo;
 
-   DadosSessao sessao = DadosSessao.getInstance();
-
+   /**
+    * Inicializa um novo painel de menu.
+    * @param janela janela em que o painel está adicionado.
+    * @param altura altura do painel.
+    * @param largura largura do painel.
+    */
    public PainelMenu(Janela janela, int altura, int largura){
       super(altura, largura);
       configPadrao();
@@ -79,6 +82,9 @@ public class PainelMenu extends PainelBase{
       });
    }
 
+   /**
+    * Inicialização dos componentes do painel de menu.
+    */
    private void initComps(){
       lbTitulo = new LbBase(40, 100, "Menu");
       lbTitulo.setFont(getFont().deriveFont((float)lbTitulo.largura() * 0.35f));
@@ -111,7 +117,7 @@ public class PainelMenu extends PainelBase{
          g2.drawImage(imgFundo, 0, 0, getWidth(), getHeight(), null);
       }
 
-      lbUsuario.setText("Olá, " + sessao.getUsuarioLogado() + "!");
+      lbUsuario.setText("Olá, " + controlador.getSessao().getUsuarioLogado() + "!");
 
       g2.setColor(Color.white);
       int arco = 10;
