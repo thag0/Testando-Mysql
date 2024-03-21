@@ -14,6 +14,7 @@ import ui.Janela;
 import ui.comps.BtBase;
 import ui.comps.LbBase;
 import ui.comps.TxtBase;
+import ui.comps.TxtSenhaBase;
 
 /**
  * Modelo de painel para o login do usuário na aplicação.
@@ -43,7 +44,7 @@ public class PainelLogin extends PainelBase{
    /**
     * Caixa de texto para pegar a entrada da senha do usuário.
     */
-   public TxtBase txtSenha;
+   public TxtSenhaBase txtSenha;
 
    /**
     * Label identificador para o campo do nome do usuário.
@@ -138,28 +139,33 @@ public class PainelLogin extends PainelBase{
    private void initComps(){
       botao = new BtBase(30, 80, "Entrar");
       botao.addActionListener(e -> {
-         if(!txtUsuario.getText().isBlank() && !txtSenha.getText().isBlank()){
-            controlador.verificarLogin();
-         
-         }else{
+         String usuario = txtUsuario.getText().trim();
+         String senha = new String(txtSenha.getPassword()).trim();
+
+         if(usuario.isEmpty() || senha.isEmpty()){
             JOptionPane.showMessageDialog(
                this, 
                "Por favor, preencha todos os campos.", 
                "Campos incompletos", 
                JOptionPane.PLAIN_MESSAGE
             );
+            
+         }else{
+            controlador.verificarLogin();
          }
       });
 
       txtUsuario = new TxtBase(20, 200, "");
       lbUsuario = new LbBase(20, 60, "Usuário");
       
-      txtSenha  = new TxtBase(20, 200, "");
+      txtSenha  = new TxtSenhaBase(20, 200, "");
       lbSenha = new LbBase(20, 60, "Senha");
 
       try{
          imgFundo = ImageIO.read(getClass().getResourceAsStream(CAMINHO_IMG_FUNDO));
-      }catch(Exception e){}
+      }catch(Exception e){
+         //sem imagem caso não encontre
+      }
    }
 
    @Override

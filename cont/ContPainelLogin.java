@@ -29,12 +29,14 @@ public class ContPainelLogin{
 
       try{
          String nome = painel.txtUsuario.getText();
-         String senha = painel.txtSenha.getText();
+         String senha = new String(painel.txtSenha.getPassword()).trim();
 
          ResultSet res = db.query(sql, nome, senha);
          if(res.next()){
             if(res.getBoolean("admin")){
                System.out.println("Usuário encontrado (admin).");
+               painel.txtSenha.setText("");
+               painel.txtUsuario.setText("");
                painel.redirecionar(painel, "menu");
             
             }else{
