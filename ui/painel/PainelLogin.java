@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-import cont.ContPainelLogin;
+import contr.ContPainelLogin;
 import ui.Janela;
 import ui.comps.BtBase;
 import ui.comps.LbBase;

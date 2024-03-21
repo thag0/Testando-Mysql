@@ -1,4 +1,4 @@
-package cont;
+package contr;
 
 import modelo.DadosSessao;
 import ui.painel.PainelMenu;
@@ -11,7 +11,7 @@ public class ContPainelMenu{
    }
 
    public void voltarLogin(){
-      DadosSessao.getInstance().usuarioLogado = "";
+      DadosSessao.getInstance().setUsuarioLogado("");;
       pm.redirecionar(pm, "login");
    }
 }

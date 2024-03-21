@@ -1,4 +1,4 @@
-package cont;
+package contr;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,8 +36,8 @@ public class ContPainelLogin{
          ResultSet res = db.query(sql, nome, senha);
          if(res.next()){
             if(res.getBoolean("admin")){
-               sessao.usuarioLogado = nome;
-               System.out.println("Usuário encontrado, " + sessao.usuarioLogado + " (admin).");
+               sessao.setUsuarioLogado(nome);
+               System.out.println("Usuário encontrado, " + sessao.getUsuarioLogado() + " (admin).");
                painel.txtSenha.setText("");
                painel.txtUsuario.setText("");
                painel.redirecionar(painel, "menu");

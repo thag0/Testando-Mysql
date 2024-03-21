@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-import cont.ContPainelMenu;
+import contr.ContPainelMenu;
 import modelo.DadosSessao;
 import ui.Janela;
 import ui.comps.BtBase;
@@ -70,7 +70,6 @@ public class PainelMenu extends PainelBase{
                lbCadastrar.largura(), lbCadastrar.altura()
             );
 
-            lbUsuario.setText("Olá, " + sessao.usuarioLogado + "!");
             lbUsuario.setBounds(
                getWidth()-lbUsuario.largura(),
                0,
@@ -86,6 +85,7 @@ public class PainelMenu extends PainelBase{
       lbTitulo.setForeground(Color.black);
 
       lbUsuario = new LbBase(40, 80, "");
+      lbUsuario.setFont(getFont().deriveFont((float)lbUsuario.largura() * 0.18f));
 
       lbCadastrar = new LbBase(20, 100, "Cadastrar");
       lbCadastrar.setFont(getFont().deriveFont((float)lbCadastrar.largura() * 0.2f));
@@ -111,7 +111,7 @@ public class PainelMenu extends PainelBase{
          g2.drawImage(imgFundo, 0, 0, getWidth(), getHeight(), null);
       }
 
-      lbUsuario.setText("Olá, " + sessao.usuarioLogado + "!");
+      lbUsuario.setText("Olá, " + sessao.getUsuarioLogado() + "!");
 
       g2.setColor(Color.white);
       int arco = 10;

@@ -105,7 +105,7 @@ public class Main{
             int opNum = Integer.parseInt(op);
             switch(opNum){
                case 1://conectar database
-                  if(sessao.dbConectado) break;
+                  if(sessao.getDBConectado()) break;
 
                   try{
                      if(db.conectar(CAMINHO_PROPERTIES)){
@@ -117,18 +117,18 @@ public class Main{
                      System.out.println("Erro: " + e.getMessage());
                   }
 
-                  sessao.dbNome = db.nome();
+                  sessao.setDBNome(db.nome());;
                   menu.esperarTecla();
                break;
 
                case 2://desconectar database
                   System.out.print("desconectando...");
                   db.desconectar();
-                  sessao.dbNome = "";//melhorar isso se der
+                  sessao.setDBNome("");//melhorar isso se der
                break;
    
                case 3://add usuario
-                  if(!sessao.dbConectado){
+                  if(!sessao.getDBConectado()){
                      System.out.println("É necessário conexão com banco de dados.");
                      menu.esperarTecla();
                      break;
@@ -145,7 +145,7 @@ public class Main{
                break;
 
                case 4://remover usuario
-                  if(!sessao.dbConectado){
+                  if(!sessao.getDBConectado()){
                      System.out.println("É necessário conexão com banco de dados.");
                      menu.esperarTecla();
                      break;
@@ -163,7 +163,7 @@ public class Main{
                break;
    
                case 5://fazer consulta
-                  if(!sessao.dbConectado){
+                  if(!sessao.getDBConectado()){
                      System.out.println("É necessário conexão com banco de dados.");
                      menu.esperarTecla();
                      break;
@@ -176,7 +176,7 @@ public class Main{
                break;
 
                case 6://fazer alteração
-                  if(!sessao.dbConectado){
+                  if(!sessao.getDBConectado()){
                      System.out.println("É necessário conexão com banco de dados.");
                      menu.esperarTecla();
                      break;
@@ -193,8 +193,8 @@ public class Main{
                break;
             }
 
-            sessao.dbConectado = db.conectado();
-            sessao.dbNome = db.nome();
+            sessao.setDBConectado(db.conectado());
+            sessao.setDBNome(db.nome());
 
          }catch(Exception excep){
             excep.printStackTrace();

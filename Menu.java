@@ -29,8 +29,8 @@ public class Menu{
       sb.append("6 - Fazer alteração").append("\n");
       sb.append("7 - Sair").append("\n");
       
-      sb.append("\nConectado: " + sessao.dbConectado);
-      sb.append(sessao.dbConectado ? " (" + sessao.dbNome +")" : "");
+      sb.append("\nConectado: " + sessao.getDBConectado());
+      sb.append(sessao.getDBConectado() ? " (" + sessao.getDBNome() +")" : "");
       sb.append("\n");
       
       System.out.println(sb.toString());
