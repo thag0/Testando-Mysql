@@ -24,7 +24,6 @@ public class Janela extends JFrame{
 
    public Janela(int altura, int largura, String titulo){
       setTitle(titulo);
-      setVisible(true);
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
       minLargura = escala * 16;
@@ -48,6 +47,7 @@ public class Janela extends JFrame{
       pack();
       setLocationRelativeTo(null);
 
+      setVisible(true);
       pLogin.setVisible(true);
    }
 

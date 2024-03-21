@@ -5,9 +5,11 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
 import ged.Ged;
+import modelo.DadosSessao;
 import modelo.Usuario;
 
 public class Menu{
+   DadosSessao sessao = DadosSessao.getInstance();
    Ged ged = new Ged();
    
    /**

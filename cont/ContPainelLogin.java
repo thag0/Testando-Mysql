@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import db.Database;
+import modelo.DadosSessao;
 import ui.painel.PainelLogin;
 
 /**
@@ -11,6 +12,7 @@ import ui.painel.PainelLogin;
  */
 public class ContPainelLogin{
    PainelLogin painel;
+   DadosSessao sessao = DadosSessao.getInstance();
 
    /**
     * Instancia um controlador responável pela lógica do painel de login.
@@ -34,7 +36,8 @@ public class ContPainelLogin{
          ResultSet res = db.query(sql, nome, senha);
          if(res.next()){
             if(res.getBoolean("admin")){
-               System.out.println("Usuário encontrado (admin).");
+               sessao.usuarioLogado = nome;
+               System.out.println("Usuário encontrado, " + sessao.usuarioLogado + " (admin).");
                painel.txtSenha.setText("");
                painel.txtUsuario.setText("");
                painel.redirecionar(painel, "menu");

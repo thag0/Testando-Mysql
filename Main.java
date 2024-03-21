@@ -7,6 +7,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import db.DAOUsuario;
 import db.Database;
+import modelo.DadosSessao;
 import ui.Janela;
 
 public class Main{
@@ -15,9 +16,10 @@ public class Main{
    public static void main(String[] args){
       Database db = Database.getInstance();
 
-
-      // rodarEmJanela(db);
-      rodarEmTerminal(db);
+      boolean terminal = false;
+      
+      if(terminal) rodarEmTerminal(db);
+      else rodarEmJanela(db);
 
       db.desconectar();//garantia
    }
@@ -47,7 +49,8 @@ public class Main{
     * Testando ainda
     */
    static void rodarEmJanela(Database db){
-      String caminhoProperties = caminhoPropriedadesDatabase();
+      // String caminhoProperties = caminhoPropriedadesDatabase();
+      String caminhoProperties = CAMINHO_PROPERTIES;//temp
 
       if(caminhoProperties != null){
          try{
@@ -88,7 +91,7 @@ public class Main{
     */
    static void rodarEmTerminal(Database db){
       DAOUsuario daoUser = new DAOUsuario();
-      DadosSessao sessao = new DadosSessao();
+      DadosSessao sessao = DadosSessao.getInstance();
 
       boolean rodando = true;
       String op = "", entrada;
