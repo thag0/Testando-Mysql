@@ -1,5 +1,7 @@
 import java.awt.Dimension;
+import java.io.FileInputStream;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -21,7 +23,11 @@ public class Main{
       if(terminal) rodarEmTerminal(db);
       else rodarEmJanela(db);
 
-      db.desconectar();//garantia
+      try{
+         db.desconectar();//garantia
+      }catch(SQLException e){
+         System.out.println(e);
+      }
    }
     
    /**
@@ -29,15 +35,16 @@ public class Main{
     * de propriedades do database.
     * @return caminho do arquivo {@code database.properties}.
     */
-   static String caminhoPropriedadesDatabase(){
+   static String buscarCaminhoDatabase(){
       JFileChooser fc = new JFileChooser();
       fc.setPreferredSize(new Dimension(600, 400));
       fc.setDialogTitle("Selecione o arquivo de propriedades do database");
-      FileNameExtensionFilter filtro = new FileNameExtensionFilter("Arquivos de Propriedades (*.properties)", "properties");
-      fc.setFileFilter(filtro);
+
+      String desc = "Arquivos de Propriedades (*.properties)";
+      String extensao = "properties";
+      fc.setFileFilter(new FileNameExtensionFilter(desc, extensao));
       
-      int confirmado = fc.showOpenDialog(null);
-      if(confirmado == JFileChooser.APPROVE_OPTION){
+      if(fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
          return fc.getSelectedFile().getAbsolutePath();
       
       }else{
@@ -46,15 +53,34 @@ public class Main{
    }
 
    /**
+    * Carrega os dados de propriedade necessários para conectar
+    * no banco de dados.
+    * @param caminho caminho do arquivo de propriedades do banco de dados.
+    * @return propriedades lidas do arquivo.
+    */
+   static Properties lerProperties(String caminho){
+      Properties props = new Properties();
+
+      try(FileInputStream fis = new FileInputStream(caminho)){
+         props.load(fis);
+
+      }catch(Exception e){
+         throw new RuntimeException(e);
+      }
+
+      return props;
+   }
+
+   /**
     * Testando ainda
     */
    static void rodarEmJanela(Database db){
-      // String caminhoProperties = caminhoPropriedadesDatabase();
-      String caminhoProperties = CAMINHO_PROPERTIES;//temp
+      Properties propsDatabase = lerProperties(buscarCaminhoDatabase());
+      // Properties propsDatabase = lerProperties(CAMINHO_PROPERTIES);//temp
 
-      if(caminhoProperties != null){
+      if(propsDatabase != null){
          try{
-            db.conectar(caminhoProperties);
+            db.conectar(propsDatabase);
             Janela janela = new Janela(600, 400, "Conectado em: " + db.nome());
             
             while(janela.isEnabled()){
@@ -63,9 +89,22 @@ public class Main{
          
          }catch(SQLException e){
             StringBuilder sb = new StringBuilder();
-            sb.append("Erro ao tentar ler o arquivo: ");
-            sb.append(e.getClass().getSimpleName()).append(": ").append(e.getMessage());
-            sb.append("Verifique se o arquivo selecionado é um arquivo de propriedades válido.");
+            sb.append("Não foi possível estabelecer conexão: ");
+            sb.append(e.getMessage()).append("\n");
+            sb.append("Verifique se o arquivo selecionado contém os valores corretos.");
+
+            JOptionPane.showMessageDialog(
+               null, 
+               sb.toString(), 
+               "Erro de conexão", 
+               JOptionPane.PLAIN_MESSAGE
+            );
+
+         }catch(IllegalArgumentException il){
+            StringBuilder sb = new StringBuilder();
+            sb.append("Falha ao ler as propriedades do arquivo: ");
+            sb.append(il.getMessage()).append("\n");
+            sb.append("Verifique se o arquivo selecionado possui as propriedades requeridas.");
 
             JOptionPane.showMessageDialog(
                null, 
@@ -92,6 +131,7 @@ public class Main{
    static void rodarEmTerminal(Database db){
       DAOUsuario daoUser = new DAOUsuario();
       DadosSessao sessao = DadosSessao.getInstance();
+      Properties propsDatabase = lerProperties(CAMINHO_PROPERTIES);
 
       boolean rodando = true;
       String op = "", entrada;
@@ -108,12 +148,11 @@ public class Main{
                   if(sessao.getDBConectado()) break;
 
                   try{
-                     if(db.conectar(CAMINHO_PROPERTIES)){
-                        System.out.println("\nConexão estabelecida com: " + db.nome());
-                     }
+                     db.conectar(propsDatabase);
+
                   }catch(SQLException e){
                      System.out.println("Não foi possível conectar ao banco de dados");
-                     System.out.println("Verifique o arquive de propriedades");
+                     System.out.println("Verifique o arquivo de propriedades");
                      System.out.println("Erro: " + e.getMessage());
                   }
 

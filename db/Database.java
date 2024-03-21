@@ -1,5 +1,4 @@
 package db;
-import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -14,7 +13,7 @@ import java.util.Properties;
 public class Database{
 
    /**
-    * Instância única de um Dataabse.
+    * Instância única de um Database.
     */
    static Database instancia;
 
@@ -47,37 +46,49 @@ public class Database{
 
    /**
     * Tenta conectar ao banco de dados desejado.
+    * <p>
+    *    O arquivo de propriedades deve conter as seguintes chaves:
+    * </p>
+    * <p>
+    *    {@code db.url} = url de conexão com banco de dados.
+    * </p>
+    * <p>
+    *    {@code db.nome} = nome do banco de dados desejado.
+    * </p>
+    * <p>
+    *    {@code db.usuario} = nome do usuário do banco de dados onde 
+    *    onde a conexão está sendo feita.
+    * </p>
+    * <p>
+    *    {@code db.senha} = senha do usuário.
+    * </p>
     * @param caminho {@code String} contendo o caminho do {@code arquivo de
     * propriedades} do banco de dados.
+    * @throws SQLException se ocorrer algum erro na tentativa de conexão.
+    * @throws IllegalArgumentException se alguma chave de propriedade não for encontrada
     */
-   public boolean conectar(String caminho) throws SQLException{
-      Properties props = lerProperties(caminho);
-
-      String url = props.getProperty("db.url") + props.getProperty("db.nome");
-      String usuario = props.getProperty("db.usuario");
-      String senha = props.getProperty("db.senha");
-      conexao = DriverManager.getConnection(url, usuario, senha);
-
-      return conectado();
-   }
-
-   /**
-    * Carrega os dados de propriedade necessários para conectar
-    * no banco de dados.
-    * @param caminho caminho do arquivo de propriedades do banco de dados.
-    * @return propriedades lidas do arquivo.
-    */
-   private Properties lerProperties(String caminho){
-      Properties props = new Properties();
-
-      try(FileInputStream fis = new FileInputStream(caminho)){
-         props.load(fis);
-
-      }catch(Exception e){
-         throw new RuntimeException(e);
+   public void conectar(Properties props) throws SQLException, IllegalArgumentException{
+      String url = props.getProperty("db.url");
+      if(url == null){
+         throw new IllegalArgumentException("\'db.url\' não encontrado.");
       }
 
-      return props;
+      String nome = props.getProperty("db.nome");
+      if(nome == null){
+         throw new IllegalArgumentException("\'db.nome\' não encontrado.");
+      }
+
+      String usuario = props.getProperty("db.usuario");
+      if(usuario == null){
+         throw new IllegalArgumentException("\'db.usuario\' não encontrado.");
+      }
+
+      String senha = props.getProperty("db.senha");
+      if(senha == null){
+         throw new IllegalArgumentException("\'db.senha\' não encontrado.");
+      }
+      
+      conexao = DriverManager.getConnection(url + nome, usuario, senha);
    }
 
    /**
@@ -88,22 +99,20 @@ public class Database{
    public boolean conectado(){
       try{
          return (conexao != null) && (!conexao.isClosed());
-      }catch(SQLException e){}
-   
-      return false;
+      
+      }catch(SQLException e){
+         return false;
+      }
    }
 
    /**
     * Desconecta o banco de dados caso ele possua uma conexão ativa.
+    * @throws SQLException caso ocorra algum erro de acesso ao banco
+    * de dados.
     */
-   public void desconectar(){
+   public void desconectar() throws SQLException{
       if(conectado()){
-         try{
-            conexao.close();
-         
-         }catch(SQLException e){
-            e.printStackTrace();
-         } 
+         conexao.close();
       }
    }
 
