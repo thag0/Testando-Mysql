@@ -2,6 +2,7 @@ package ui.painel;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
@@ -86,14 +87,20 @@ public class PainelLogin extends PainelBase{
       setLayout(null);
 
       initComps();
+      configComps();
 
-      add(txtUsuario);
-      add(txtSenha);
       add(lbUsuario);
+      add(txtUsuario);
       add(lbSenha);
+      add(txtSenha);
       add(botao);
+   }
 
-      // redimensionar dinamicamente os componentes
+   /**
+    * Configura os componentes para adaptação dinâmica com o 
+    * as dimensões da janela.
+    */
+   private void configComps(){
       addComponentListener(new ComponentAdapter(){
          public void componentResized(ComponentEvent e){
             int centroX = getWidth()/2;
@@ -171,10 +178,11 @@ public class PainelLogin extends PainelBase{
    @Override
    protected void paintComponent(Graphics g){
       super.paintComponent(g);
-      //não usar graphics2d para desenhar por inconsistências
-      
+
       if(imgFundo != null){
-         g.drawImage(imgFundo, 0, 0, getWidth(), getHeight(), null);
+         Graphics2D g2d = (Graphics2D) g.create();
+         g2d.drawImage(imgFundo, 0, 0, getWidth(), getHeight(), null);
+         g2d.dispose();
       }
    }
 

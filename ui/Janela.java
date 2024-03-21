@@ -43,12 +43,12 @@ public class Janela extends JFrame{
       add(pLogin);
       add(pMenu);
 
-      setLayout(new CardLayout());
-
-      pLogin.setVisible(true);
+      setLayout(new CardLayout());//layout para os painéis
       
       pack();
       setLocationRelativeTo(null);
+
+      pLogin.setVisible(true);
    }
 
    /**
