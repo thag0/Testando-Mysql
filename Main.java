@@ -15,7 +15,9 @@ public class Main{
    public static void main(String[] args){
       Database db = Database.getInstance();
 
-      rodarEmJanela(db);
+
+      // rodarEmJanela(db);
+      rodarEmTerminal(db);
 
       db.desconectar();//garantia
    }
@@ -45,8 +47,7 @@ public class Main{
     * Testando ainda
     */
    static void rodarEmJanela(Database db){
-      // String caminhoProperties = caminhoPropriedadesDatabase();
-      String caminhoProperties = CAMINHO_PROPERTIES;//temporario para acelerar os testes
+      String caminhoProperties = caminhoPropriedadesDatabase();
 
       if(caminhoProperties != null){
          try{
@@ -103,11 +104,16 @@ public class Main{
                case 1://conectar database
                   if(sessao.dbConectado) break;
 
-                  System.out.println("conectando...");
-                  
-                  if(db.conectar(CAMINHO_PROPERTIES)){
-                     System.out.println("\nConexão estabelecida com: " + db.nome());
+                  try{
+                     if(db.conectar(CAMINHO_PROPERTIES)){
+                        System.out.println("\nConexão estabelecida com: " + db.nome());
+                     }
+                  }catch(SQLException e){
+                     System.out.println("Não foi possível conectar ao banco de dados");
+                     System.out.println("Verifique o arquive de propriedades");
+                     System.out.println("Erro: " + e.getMessage());
                   }
+
                   sessao.dbNome = db.nome();
                   menu.esperarTecla();
                break;
@@ -187,8 +193,8 @@ public class Main{
             sessao.dbConectado = db.conectado();
             sessao.dbNome = db.nome();
 
-         }catch(Exception e){
-            e.printStackTrace();
+         }catch(Exception excep){
+            excep.printStackTrace();
             menu.esperarTecla();
          }
       }
