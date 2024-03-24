@@ -15,6 +15,15 @@ public class ContPainelLogin{
    DadosSessao sessao = DadosSessao.getInstance();
 
    /**
+    * Opções personalizadas para o controlador de login.
+    */
+   public enum LOGIN_OPS{
+      LOGIN_ADM,
+      LOGIN_USUARIO,
+      LOGIN_NAO_ENCONTRADO
+   };
+
+   /**
     * Instancia um controlador responável pela lógica do painel de login.
     * @param pl painel de login.
     */
@@ -23,11 +32,20 @@ public class ContPainelLogin{
    }
 
    /**
-    * 
+    * Retorna os dados da sessão atual.
+    * @return dados da sessão atual.
     */
-   public void verificarLogin(){
+   public DadosSessao getSessao(){
+      return sessao;
+   }
+
+   /**
+    * ...
+    */
+   public LOGIN_OPS verificarLogin(){
       Database db = Database.getInstance();
       String sql = "SELECT * FROM usuarios WHERE nome = ? AND senha = ?";
+      LOGIN_OPS ops = LOGIN_OPS.LOGIN_NAO_ENCONTRADO;
 
       try{
          String nome = painel.txtUsuario.getText();
@@ -37,20 +55,20 @@ public class ContPainelLogin{
          if(res.next()){
             if(res.getBoolean("admin")){
                sessao.setUsuarioLogado(nome);
-               System.out.println("Usuário encontrado, " + sessao.getUsuarioLogado() + " (admin).");
-               painel.txtSenha.setText("");
-               painel.txtUsuario.setText("");
-               painel.redirecionar(painel, "menu");
+               ops = LOGIN_OPS.LOGIN_ADM;
             
             }else{
-               System.out.println("Usuário encontrado.");
+               ops = LOGIN_OPS.LOGIN_USUARIO;
             }
 
          }else{
-            System.out.println("Usuário não encontrado.");
+            ops = LOGIN_OPS.LOGIN_NAO_ENCONTRADO;
          }
       }catch(SQLException e){
+         ops = LOGIN_OPS.LOGIN_NAO_ENCONTRADO;
          e.printStackTrace();
       }
+
+      return ops;
    }
 }

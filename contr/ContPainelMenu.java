@@ -4,19 +4,19 @@ import modelo.DadosSessao;
 import ui.painel.PainelMenu;
 
 public class ContPainelMenu{
-   private PainelMenu pm;
+   private PainelMenu painel;
    DadosSessao sessao = DadosSessao.getInstance();
 
    public ContPainelMenu(PainelMenu pm){
-      this.pm = pm;
+      this.painel = pm;
    }
 
    public DadosSessao getSessao(){
       return sessao;
    }
 
-   public void voltarLogin(){
-      DadosSessao.getInstance().setUsuarioLogado("");;
-      pm.redirecionar(pm, "login");
+   public void voltarParaLogin(){
+      sessao.setUsuarioLogado("");
+      painel.redirecionar(painel, "login");
    }
 }

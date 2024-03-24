@@ -57,9 +57,9 @@ public class PainelMenu extends PainelBase{
       addComponentListener(new ComponentAdapter(){
          public void componentResized(ComponentEvent e){
             botaoVoltar.setBounds(
-               -2,
-               getHeight() - botaoVoltar.altura() + 2,
-               botaoVoltar.largura(), botaoVoltar.altura()         
+               -4,
+               getHeight() - botaoVoltar.altura()+4,
+               botaoVoltar.largura()+4, botaoVoltar.altura()+4         
             );
 
             lbTitulo.setBounds(
@@ -98,7 +98,7 @@ public class PainelMenu extends PainelBase{
 
       botaoVoltar = new BtBase(30, 80, "Voltar");
       botaoVoltar.addActionListener(e -> {
-         controlador.voltarLogin();
+         controlador.voltarParaLogin();
       });
 
       try{

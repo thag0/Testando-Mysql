@@ -75,46 +75,9 @@ public class Main{
     * Testando ainda
     */
    static void rodarEmJanela(Database db){
-      Properties propsDatabase = lerProperties(buscarCaminhoDatabase());
-      // Properties propsDatabase = lerProperties(CAMINHO_PROPERTIES);//temp
+      String caminhoPropriedades = buscarCaminhoDatabase();
 
-      if(propsDatabase != null){
-         try{
-            db.conectar(propsDatabase);
-            Janela janela = new Janela(600, 400, "Conectado em: " + db.nome());
-            
-            while(janela.isEnabled()){
-               //loop pra segurar a execução do programa
-            }
-         
-         }catch(SQLException e){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Não foi possível estabelecer conexão: ");
-            sb.append(e.getMessage()).append("\n");
-            sb.append("Verifique se o arquivo selecionado contém os valores corretos.");
-
-            JOptionPane.showMessageDialog(
-               null, 
-               sb.toString(), 
-               "Erro de conexão", 
-               JOptionPane.PLAIN_MESSAGE
-            );
-
-         }catch(IllegalArgumentException il){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Falha ao ler as propriedades do arquivo: ");
-            sb.append(il.getMessage()).append("\n");
-            sb.append("Verifique se o arquivo selecionado possui as propriedades requeridas.");
-
-            JOptionPane.showMessageDialog(
-               null, 
-               sb.toString(), 
-               "Formato de arquivo inválido", 
-               JOptionPane.PLAIN_MESSAGE
-            );
-         }
-      
-      }else{
+      if(caminhoPropriedades == null){
          JOptionPane.showMessageDialog(
             null, 
             "Nenhum arquivo de propriedades para o banco de dados selecionado", 
@@ -123,8 +86,45 @@ public class Main{
          );
          return;
       }
-   }
 
+      Properties propsDatabase = lerProperties(caminhoPropriedades);
+      
+      try{
+         db.conectar(propsDatabase);
+         Janela janela = new Janela(600, 400, "Conectado em: " + db.nome());
+         
+         while(janela.isEnabled()){
+            //loop pra segurar a execução do programa
+         }
+      
+      }catch(SQLException e){
+         StringBuilder sb = new StringBuilder();
+         sb.append("Não foi possível estabelecer conexão: ");
+         sb.append(e.getMessage()).append("\n");
+         sb.append("Verifique se o arquivo selecionado contém os valores corretos.");
+
+         JOptionPane.showMessageDialog(
+            null, 
+            sb.toString(), 
+            "Erro de conexão", 
+            JOptionPane.PLAIN_MESSAGE
+         );
+
+      }catch(IllegalArgumentException il){
+         StringBuilder sb = new StringBuilder();
+         sb.append("Falha ao ler as propriedades do arquivo: ");
+         sb.append(il.getMessage()).append("\n");
+         sb.append("Verifique se o arquivo selecionado possui as propriedades requeridas.");
+
+         JOptionPane.showMessageDialog(
+            null, 
+            sb.toString(), 
+            "Formato de arquivo inválido", 
+            JOptionPane.PLAIN_MESSAGE
+         );
+      }
+   }
+   
    /**
     * Execução padrão e mais básica.
     */

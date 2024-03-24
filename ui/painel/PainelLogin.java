@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import contr.ContPainelLogin;
+import contr.ContPainelLogin.LOGIN_OPS;
 import ui.Janela;
 import ui.comps.BtBase;
 import ui.comps.LbBase;
@@ -158,7 +159,31 @@ public class PainelLogin extends PainelBase{
             );
             
          }else{
-            controlador.verificarLogin();
+            LOGIN_OPS res = controlador.verificarLogin();
+
+            if(res == LOGIN_OPS.LOGIN_ADM){
+               txtUsuario.setText("");
+               txtSenha.setText("");
+               redirecionar(this, "menu");
+            }
+
+            else if(res == LOGIN_OPS.LOGIN_USUARIO){
+               JOptionPane.showMessageDialog(
+                  this, 
+                  "Usuário deve ser admnistrador", 
+                  "Permissão negada", 
+                  JOptionPane.PLAIN_MESSAGE
+               );
+            }
+
+            else if(res == LOGIN_OPS.LOGIN_NAO_ENCONTRADO){
+               JOptionPane.showMessageDialog(
+                  this, 
+                  "Usuário não encontrado", 
+                  "Dados não encontrados", 
+                  JOptionPane.PLAIN_MESSAGE
+               );
+            }
          }
       });
 
